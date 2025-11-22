@@ -1,0 +1,27 @@
+{
+  "name": "@fin/bill-parser-pdf-parse",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf ./dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@fin/bill-parser": "1.0.0",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/pdf-parse": "^1.1.4"
+  }
+}

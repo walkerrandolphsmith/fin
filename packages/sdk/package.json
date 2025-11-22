@@ -1,0 +1,24 @@
+{
+  "name": "@fin/sdk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf ./dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@fin/application": "1.0.0",
+    "@fin/domain": "1.0.0"
+  }
+}

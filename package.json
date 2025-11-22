@@ -1,0 +1,27 @@
+{
+  "name": "fin",
+  "private": true,
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspace @fin/web build && yarn workspace @fin/ctl build",
+    "dev": "yarn workspace @fin/web dev",
+    "ctl": "yarn workspace @fin/ctl dev",
+    "clean": "yarn workspaces run clean",
+    "clean:dist": "find . -type d -name 'dist' -exec rm -rf {} +",
+    "clean:modules": "find . -type d -name 'node_modules' -exec rm -rf {} +",
+    "format": "prettier --write 'packages/**/*.{ts,tsx,js,json,css,scss,md}'"
+  },
+  "packageManager": "yarn@4.0.2",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
+  }
+}
