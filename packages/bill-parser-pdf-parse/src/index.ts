@@ -1,18 +1,13 @@
-import type { BillDetails, IParseBillDocument } from "@fin/bill-parser";
+import type {
+  BillDetails,
+  IExtractBillDetailsFromPrintableDocuments,
+} from "@fin/bill-parser";
 import pdfParse from "pdf-parse";
 
 interface ExtractedField<T> {
   value: T | undefined;
   confidence: number;
 }
-
-interface ParserConfig {
-  maxPages?: number;
-}
-
-const DEFAULT_CONFIG: Required<ParserConfig> = {
-  maxPages: 3,
-};
 
 const KNOWN_PROVIDERS = [
   "Georgia Power",
@@ -31,7 +26,7 @@ const KNOWN_PROVIDERS = [
 const PROVIDER_PATTERNS = [
   /(?:from|billed by|provider|company)[:\s]*([A-Z][A-Za-z\s&.]+(?:Inc|LLC|Corp|Company|Co)?)/i,
   /^([A-Z][A-Z\s&.]{2,}(?:Inc|LLC|Corp|Company|Co|Energy|Electric|Gas|Water|Telecom|Mobile|Internet|Exterminators|Pest|Gymnastics)?)\s*$/m,
-  /((?:AT&T|Verizon|Comcast|Xfinity|Georgia Power|PG&E|ConEdison|National Grid|Spectrum|T-Mobile|Sprint|Arrow Exterminators|Gymnastics Unlimited))/i,
+  /((?:AT&T|Verizon|Comcast|Xfinity|Georgia Power|Spectrum|T-Mobile|Sprint|Arrow Exterminators|Gymnastics Unlimited))/i,
 ];
 
 const AMOUNT_PATTERNS = [
@@ -57,13 +52,8 @@ const DUE_DATE_PATTERNS = [
   /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/,
 ];
 
-class PdfTextBillParser implements IParseBillDocument {
+class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
   public readonly name = "pdf-parse";
-  private config: Required<ParserConfig>;
-
-  constructor(config: ParserConfig = {}) {
-    this.config = { ...DEFAULT_CONFIG, ...config };
-  }
 
   private async extractText(pdfBuffer: Buffer): Promise<string> {
     const result = await pdfParse(pdfBuffer);
@@ -72,11 +62,6 @@ class PdfTextBillParser implements IParseBillDocument {
 
   async parse(pdfBuffer: Buffer): Promise<BillDetails> {
     const fullText = await this.extractText(pdfBuffer);
-
-    console.log("==== PDF TEXT DUMP START ====");
-    console.log(fullText);
-    console.log("==== PDF TEXT DUMP END ====");
-
     const amount = this.extractAmount(fullText);
     const provider = this.extractProvider(fullText);
     const portal = this.extractPaymentPortal(fullText);
@@ -280,5 +265,4 @@ class PdfTextBillParser implements IParseBillDocument {
   }
 }
 
-export { PdfTextBillParser as DefaultBillParser };
-export type { ParserConfig };
+export { PdfTextBillParser };

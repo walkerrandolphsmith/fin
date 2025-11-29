@@ -7,8 +7,9 @@
 Install dependencies and link the CLI locally:
 
 ```bash
+yarn workspace @fin/ctl build
 cd ./packages/ctl
-npm run clean && npm run build && npm install -g .
+npm install -g .
 ```
 
 You can now use `finctl` globally on your machine.

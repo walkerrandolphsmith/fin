@@ -27,6 +27,10 @@
       "@fin/sdk/*": ["../sdk/src/*"],
       "@fin/bill-parser": ["../bill-parser/src"],
       "@fin/bill-parser/*": ["../bill-parser/src/*"],
+      "@fin/bill-parser-decorator": ["../bill-parser-decorator/src"],
+      "@fin/bill-parser-decorator/*": ["../bill-parser-decorator/src/*"],
+      "@fin/bill-parser-claude": ["../bill-parser-claude/src"],
+      "@fin/bill-parser-claude/*": ["../bill-parser-claude/src/*"],
       "@fin/bill-parser-pdf-parse": ["../bill-parser-pdf-parse/src"],
       "@fin/bill-parser-pdf-parse/*": ["../bill-parser-pdf-parse/src/*"]
     }

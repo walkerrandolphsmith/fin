@@ -23,7 +23,9 @@
     "@fin/domain": "1.0.0",
     "@fin/infrastructure": "1.0.0",
     "@fin/bill-parser": "1.0.0",
+    "@fin/bill-parser-decorator": "1.0.0",
     "@fin/bill-parser-pdf-parse": "1.0.0",
+    "@fin/bill-parser-claude": "1.0.0",
     "@fin/application": "1.0.0",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.10.0"

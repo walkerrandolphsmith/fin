@@ -23,5 +23,8 @@ export default defineConfig({
     "cross-env",
     "mongoose",
     "pdf-parse",
+    "tesseract.js",
+    "pdf2pic",
+    "pdf-poppler",
   ],
 });

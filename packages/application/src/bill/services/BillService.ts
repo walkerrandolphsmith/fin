@@ -1,5 +1,8 @@
 import { Bill, BillService as DomainService } from "@fin/domain";
-import { BillDetails, IParseBillDocument } from "../../../../bill-parser/src";
+import {
+  BillDetails,
+  IExtractBillDetailsFromPrintableDocuments,
+} from "../../../../bill-parser/src";
 import { BillDTO } from "../dtos/BillDTO";
 import { ReorderBillsRequestDTO } from "../dtos/ReorderBillsRequestDTO";
 import { UpdateBillDTO } from "../dtos/UpdateBillDTO";
@@ -16,7 +19,7 @@ import { BillFilter } from "../types";
 export class BillService {
   constructor(
     private readonly domainService: DomainService,
-    private readonly billParser: IParseBillDocument
+    private readonly billParser: IExtractBillDetailsFromPrintableDocuments
   ) {}
 
   private chooseStrategy(dto: UpdateBillDTO): IBillMutation {

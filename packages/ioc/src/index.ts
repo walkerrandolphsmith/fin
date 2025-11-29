@@ -1,9 +1,8 @@
-import "reflect-metadata";
-import { container, DependencyContainer } from "tsyringe";
-
 import { BillService, PaymentSourceService } from "@fin/application";
-import { BillParserDecorator, IParseBillDocument } from "@fin/bill-parser";
-import { DefaultBillParser } from "@fin/bill-parser-pdf-parse";
+import { IExtractBillDetailsFromPrintableDocuments } from "@fin/bill-parser";
+import { ClaudeBillParser } from "@fin/bill-parser-claude";
+import { BillParserDecorator } from "@fin/bill-parser-decorator";
+import { PdfTextBillParser } from "@fin/bill-parser-pdf-parse";
 import {
   BillService as BillDomainService,
   IBillRepository,
@@ -12,7 +11,17 @@ import {
   PaymentSourceService as PaymentSourceDomainService,
 } from "@fin/domain";
 import { UnitOfWork } from "@fin/infrastructure";
+import "reflect-metadata";
+import { container, DependencyContainer } from "tsyringe";
 
+/**
+ * TOKENS - a registry of Symbol keys used for dependency injection registrations.
+ * Each key represents either an interface token, a concrete implementation token,
+ * or an application/domain service token. Use these symbols when registering
+ * or resolving dependencies from the DI container to avoid magic strings.
+ *
+ * @constant {Object.<string, symbol>} TOKENS
+ */
 const TOKENS = {
   IBillRepository: Symbol.for("IBillRepository"),
   IPaymentSourceRepository: Symbol.for("IPaymentSourceRepository"),
@@ -26,6 +35,32 @@ const TOKENS = {
   BillParser: Symbol.for("BillParser"),
 };
 
+/**
+ * Set up and configure the tsyringe DependencyContainer for the application.
+ *
+ * Responsibilities:
+ * - Dynamically import persistence implementations (repositories and DB connector).
+ * - Register concrete repository classes under both concrete and interface tokens.
+ * - Register domain services and application services using factory providers
+ *   so their runtime dependencies are resolved from the container.
+ * - Register UnitOfWork and a BillParser decorator that composes multiple
+ *   parser implementations.
+ * - Initiate and await the database connection before returning the container.
+ *
+ * Side effects:
+ * - Initiates a mongoose (or other) connection via the infrastructure layer.
+ * - Mutates the shared `container` from tsyringe by registering tokens.
+ *
+ * @async
+ * @function setupContainer
+ * @returns {Promise<DependencyContainer>} Resolves with the configured
+ *   tsyringe DependencyContainer once the DB connection is established and
+ *   registrations are complete.
+ * @throws {Error} If dynamic imports, registrations, or the DB connection fail.
+ * @example
+ * await setupContainer();
+ * const c = container; // configured tsyringe container
+ */
 async function setupContainer(): Promise<DependencyContainer> {
   const { BillRepository, PaymentSourceRepository, connectMongoose } =
     await import("@fin/infrastructure");
@@ -71,7 +106,9 @@ async function setupContainer(): Promise<DependencyContainer> {
       const domainService = c.resolve<BillDomainService>(
         TOKENS.BillDomainService
       );
-      const parser = c.resolve<IParseBillDocument>(TOKENS.BillParser);
+      const parser = c.resolve<IExtractBillDetailsFromPrintableDocuments>(
+        TOKENS.BillParser
+      );
       return new BillService(domainService, parser);
     },
   });
@@ -91,7 +128,10 @@ async function setupContainer(): Promise<DependencyContainer> {
 
   container.register(TOKENS.BillParser, {
     useFactory: (c) => {
-      return new BillParserDecorator([new DefaultBillParser()]);
+      return new BillParserDecorator([
+        new PdfTextBillParser(),
+        new ClaudeBillParser(),
+      ]);
     },
   });
 
@@ -102,6 +142,20 @@ async function setupContainer(): Promise<DependencyContainer> {
 
 let initialized = false;
 
+/**
+ * Return the singleton tsyringe container for the application.
+ *
+ * This function ensures setupContainer() is executed only once. On the first
+ * invocation it will initialise and configure the container; subsequent calls
+ * return the already-initialized container immediately.
+ *
+ * @async
+ * @function getContainer
+ * @returns {Promise<DependencyContainer>} Promise resolving to the initialized
+ *   DependencyContainer singleton.
+ * @example
+ * const c = await getContainer();
+ */
 async function getContainer() {
   if (!initialized) {
     await setupContainer();

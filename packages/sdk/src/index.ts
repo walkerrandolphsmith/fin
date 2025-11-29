@@ -1,2 +1,2 @@
-export * as BillsSDK from "./bills";
-export * as PaymentSourcesSDK from "./paymentSources";
+export { billSDK as BillsSDK } from "./bills";
+export { paymentSourceSDK as PaymentSourcesSDK } from "./paymentSources";

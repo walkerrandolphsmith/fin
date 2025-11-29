@@ -1,4 +1,4 @@
-import { IParseBillDocument } from "@fin/bill-parser";
+import { IExtractBillDetailsFromPrintableDocuments } from "@fin/bill-parser";
 import { BillService } from "@fin/domain";
 import { BillRepository } from "@fin/infrastructure";
 import { container, TOKENS } from "@fin/ioc";
@@ -107,9 +107,10 @@ export class BillCommandFactory implements IBuildCommand {
         const spinner = ora("Loading bill...").start();
         try {
           const pdfBuffer = await readFile(path);
-          const parser = container.resolve<IParseBillDocument>(
-            TOKENS.BillParser
-          );
+          const parser =
+            container.resolve<IExtractBillDetailsFromPrintableDocuments>(
+              TOKENS.BillParser
+            );
           const result = await parser.parse(pdfBuffer);
           spinner.succeed("Document parsed");
           console.log(JSON.stringify(result, null, 2));
