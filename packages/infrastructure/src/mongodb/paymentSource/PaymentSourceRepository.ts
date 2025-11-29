@@ -9,11 +9,31 @@ import { disconnectMongoose } from "../db/client";
 import { PaymentSourceMapper as PaymentSourcePersistenceMapper } from "./PaymentSourceMapper";
 import { IPaymentSource, PaymentSourceModel } from "./PaymentSourceModel";
 
+/**
+ * Mongoose-based repository for PaymentSource aggregate.
+ *
+ * Responsibilities:
+ * - Convert between persistence documents and domain entities using the
+ *   `PaymentSourceMapper`.
+ * - Provide CRUD operations and dispose semantics.
+ * - Participate in request-scoped sessions via `asyncLocalStorage` when
+ *   available (used to support UnitOfWork semantics).
+ */
 export class PaymentSourceRepository implements IPaymentSourceRepository {
+  /**
+   * Validate that a string is a MongoDB ObjectId (24 hex characters).
+   * @param {string} id
+   * @returns {boolean}
+   */
   isValidObjectId(id: string): boolean {
     return /^[0-9a-fA-F]{24}$/.test(id);
   }
 
+  /**
+   * Retrieve all payment sources. Respects an optional session supplied via
+   * `asyncLocalStorage`.
+   * @returns {Promise<PaymentSource[]>}
+   */
   async getAll(): Promise<PaymentSource[]> {
     const context = asyncLocalStorage.getStore();
     const session = context?.session ?? null;
@@ -24,6 +44,12 @@ export class PaymentSourceRepository implements IPaymentSourceRepository {
     return docs.map(PaymentSourcePersistenceMapper.fromModel);
   }
 
+  /**
+   * Get a payment source by id. Validates id and throws domain errors when
+   * appropriate.
+   * @param {string} id
+   * @returns {Promise<PaymentSource>}
+   */
   async getById(id: string): Promise<PaymentSource> {
     if (!this.isValidObjectId(id)) throw new InvalidEntityIdError(id);
 
@@ -37,6 +63,11 @@ export class PaymentSourceRepository implements IPaymentSourceRepository {
     return PaymentSourcePersistenceMapper.fromModel(doc);
   }
 
+  /**
+   * Create a new payment source in the persistence store.
+   * @param {PaymentSource} entity
+   * @returns {Promise<PaymentSource>}
+   */
   async create(entity: PaymentSource): Promise<PaymentSource> {
     const context = asyncLocalStorage.getStore();
     const session = context?.session ?? null;
@@ -48,6 +79,12 @@ export class PaymentSourceRepository implements IPaymentSourceRepository {
     return newEntity;
   }
 
+  /**
+   * Update an existing payment source by id.
+   * @param {string} id
+   * @param {PaymentSource} entity
+   * @returns {Promise<PaymentSource>}
+   */
   async update(id: string, entity: PaymentSource): Promise<PaymentSource> {
     if (!this.isValidObjectId(id)) throw new InvalidEntityIdError(id);
 
@@ -67,6 +104,11 @@ export class PaymentSourceRepository implements IPaymentSourceRepository {
     return PaymentSourcePersistenceMapper.fromModel(updated);
   }
 
+  /**
+   * Delete a payment source by id.
+   * @param {string} id
+   * @returns {Promise<null>}
+   */
   async delete(id: string): Promise<null> {
     if (!this.isValidObjectId(id)) throw new InvalidEntityIdError(id);
 
@@ -78,6 +120,10 @@ export class PaymentSourceRepository implements IPaymentSourceRepository {
     return null;
   }
 
+  /**
+   * Dispose repository resources (disconnect mongoose client).
+   * @returns {Promise<void>}
+   */
   async dispose(): Promise<void> {
     return disconnectMongoose();
   }

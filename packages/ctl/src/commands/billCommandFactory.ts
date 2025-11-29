@@ -9,7 +9,29 @@ import ora from "ora";
 import { formatTable } from "../utils/output.js";
 import { IBuildCommand } from "./IBuildCommand";
 
+/**
+ * Factory that builds the `bill` CLI command and its subcommands.
+ *
+ * This class implements the `IBuildCommand` factory interface: callers invoke
+ * `build()` to obtain a fully configured `commander.Command` instance that can
+ * be registered with the top-level CLI program. The factory wires together
+ * application services and repository implementations from the IoC container
+ * and provides user-friendly CLI behavior (spinners, formatted output,
+ * and error handling).
+ */
 export class BillCommandFactory implements IBuildCommand {
+  /**
+   * Build and return the `bill` command with subcommands:
+   * - `list` - lists bills with optional filtering and output formats
+   * - `show <id>` - display detailed information about a single bill
+   * - `parse <path>` - parse a PDF file using the configured bill parser
+   *
+   * Each subcommand handles its own I/O, uses the IoC container for
+   * dependencies, and attempts to dispose repository resources before exit.
+   * Errors are logged and the process exits with a non-zero code on failure.
+   *
+   * @returns {Command} Configured `bill` command ready to be registered.
+   */
   build() {
     const billCommand = new Command("bill").description("Manage bills");
     billCommand
@@ -103,8 +125,8 @@ export class BillCommandFactory implements IBuildCommand {
     billCommand
       .command("parse <path>")
       .description("Parse bill details from pdf file")
-      .action(async (path, options) => {
-        const spinner = ora("Loading bill...").start();
+      .action(async (path) => {
+        const spinner = ora("Parsing bill...").start();
         try {
           const pdfBuffer = await readFile(path);
           const parser =

@@ -8,6 +8,18 @@ import { RenamePaymentSourceMutation } from "../mutations/RenamePaymentSourceMut
 export class PaymentSourceService {
   constructor(private readonly domainService: DomainService) {}
 
+  /**
+   * Strategy Pattern — Context Method
+   *
+   * This method acts as the Strategy pattern context, orchestrating the
+   * strategy selection and execution. It demonstrates the pattern's key benefit:
+   * the client (this method) remains unchanged regardless of which concrete
+   * strategy is selected and executed.
+   *
+   * @param dto - The update request containing mutation type and data
+   * @returns Promise resolving to the updated bill DTO
+   * @throws May throw domain errors from the selected strategy execution
+   */
   async updatePaymentSource(
     dto: UpdatePaymentSourceDTO
   ): Promise<PaymentSourceDTO> {
@@ -15,6 +27,17 @@ export class PaymentSourceService {
     return updateStrategy.execute(dto, this.domainService);
   }
 
+  /**
+   * Strategy Pattern — Mutation Strategy Selection
+   *
+   * This method implements the Strategy pattern by selecting and instantiating
+   * the appropriate IPaymentSourceMutation concrete strategy based on the mutation type.
+   * Each mutation type maps to a specific algorithm encapsulated in its own
+   * strategy class, enabling runtime strategy selection and easy extensibility.
+   *
+   * @param dto - The update DTO containing the mutation type and data
+   * @returns The concrete mutation strategy instance to execute
+   */
   private chooseStrategy(dto: UpdatePaymentSourceDTO): IPaymentSourceMutation {
     switch (dto.mutationType) {
       case "rename":

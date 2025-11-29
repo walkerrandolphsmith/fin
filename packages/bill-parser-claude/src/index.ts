@@ -4,6 +4,10 @@ import {
   IExtractBillDetailsFromPrintableDocuments,
 } from "@fin/bill-parser";
 
+/**
+ * Shape of the structured response we expect from Claude after parsing.
+ * Fields are optional and undefined when not present.
+ */
 interface ClaudeResponse {
   amount?: number;
   serviceProvider?: string;
@@ -11,12 +15,39 @@ interface ClaudeResponse {
   dueDate?: string;
 }
 
+/**
+ * Parser implementation that uses Anthropic Claude to extract bill details
+ * from a PDF buffer.
+ *
+ * Responsibilities:
+ * - Send the PDF (base64) and a structured prompt to Claude.
+ * - Parse the returned text as JSON and map it to the BillDetails shape.
+ * - Provide conservative error handling: on any failure return a
+ *   low-confidence result ({ confidence: 0 }).
+ *
+ * Notes:
+ * - The implementation expects Claude to return JSON only (no markdown/code
+ *   fences). It attempts to strip common fences before parsing.
+ * - The `parseWithClaude` method contains the prompt used and implements
+ *   the raw I/O with the Anthropic SDK; callers should rely on `parse` for a
+ *   normalized BillDetails result.
+ */
 class ClaudeBillParser implements IExtractBillDetailsFromPrintableDocuments {
+  /** Human readable name for this parser implementation */
   public readonly name = "anthropic-claude";
+
+  /** Anthropic SDK client instance */
   private client: Anthropic;
   private model: string;
   private maxTokens: number;
 
+  /**
+   * Construct a new ClaudeBillParser.
+   *
+   * It reads the Anthropic API key from the `ANTHROPIC_API_KEY` environment
+   * variable and sets a default model and token limit. No network IO occurs
+   * during construction.
+   */
   constructor() {
     this.client = new Anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY,
@@ -25,6 +56,19 @@ class ClaudeBillParser implements IExtractBillDetailsFromPrintableDocuments {
     this.maxTokens = 1024;
   }
 
+  /**
+   * Public parse entrypoint that returns a normalized BillDetails object.
+   *
+   * Behavior:
+   * - Calls `parseWithClaude` to obtain raw parsed fields.
+   * - Computes a simple confidence score based on how many fields were
+   *   successfully extracted.
+   * - Logs the extracted bill details for observability and returns the
+   *   result. On error, logs and returns `{ confidence: 0 }`.
+   *
+   * @param {Buffer} pdfBuffer - PDF bytes to parse.
+   * @returns {Promise<BillDetails>} Extracted bill fields with a confidence score.
+   */
   async parse(pdfBuffer: Buffer): Promise<BillDetails> {
     try {
       const result = await this.parseWithClaude(pdfBuffer);
@@ -57,6 +101,20 @@ class ClaudeBillParser implements IExtractBillDetailsFromPrintableDocuments {
     }
   }
 
+  /**
+   * Low-level helper that sends the input PDF and prompt to Claude and
+   * returns the parsed JSON object. This method performs several defensive
+   * steps:
+   * - Encodes the PDF as base64 and includes it as a document part.
+   * - Sends a focussed prompt instructing Claude to output JSON only.
+   * - Accepts text responses and strips common Markdown code fences before
+   *   attempting JSON.parse.
+   *
+   * @private
+   * @param {Buffer} pdfBuffer - Raw PDF bytes to send to Claude.
+   * @returns {Promise<ClaudeResponse>} Parsed fields from Claude (may be empty).
+   * @throws {Error} If the Claude response is unexpected or JSON parsing fails.
+   */
   private async parseWithClaude(pdfBuffer: Buffer): Promise<ClaudeResponse> {
     const prompt = `You are a bill parsing assistant. Extract the following information from this bill text and return ONLY valid JSON with no markdown, no code blocks, no explanations.
 

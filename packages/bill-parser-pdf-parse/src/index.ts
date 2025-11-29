@@ -4,6 +4,14 @@ import type {
 } from "@fin/bill-parser";
 import pdfParse from "pdf-parse";
 
+/**
+ * Represents an extracted field value along with a heuristic confidence score.
+ *
+ * @template T
+ * @property {T | undefined} value - Extracted value or undefined when not found.
+ * @property {number} confidence - Heuristic confidence in the extracted value
+ *   (0-1 where higher is better).
+ */
 interface ExtractedField<T> {
   value: T | undefined;
   confidence: number;
@@ -52,14 +60,46 @@ const DUE_DATE_PATTERNS = [
   /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/,
 ];
 
+/**
+ * PDF-based bill parser that extracts structured fields from printable
+ * documents using text extracted by `pdf-parse` and a collection of
+ * regular-expression and heuristic based extractors.
+ *
+ * The parser implements `IExtractBillDetailsFromPrintableDocuments` and
+ * returns a `BillDetails` object with a simple aggregated confidence score.
+ *
+ * Extraction strategy (high level):
+ * - Extract plain text from the PDF using `pdf-parse`.
+ * - Run a set of regex patterns and heuristics to locate amount, provider,
+ *   payment portal and due date.
+ * - Compute per-field confidence values and aggregate them into an overall
+ *   confidence score returned alongside the parsed values.
+ */
 class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
   public readonly name = "pdf-parse";
 
+  /**
+   * Extract raw text from a PDF buffer using the pdf-parse library.
+   *
+   * @private
+   * @param {Buffer} pdfBuffer - PDF bytes to extract text from.
+   * @returns {Promise<string>} Resolves with the extracted plain text.
+   */
   private async extractText(pdfBuffer: Buffer): Promise<string> {
     const result = await pdfParse(pdfBuffer);
     return result.text;
   }
 
+  /**
+   * Parse a PDF buffer and return structured bill details.
+   *
+   * The method orchestrates text extraction and field-specific extractors,
+   * computes per-field confidences, and returns a `BillDetails` object with
+   * an aggregated confidence score between 0 and 1.
+   *
+   * @param {Buffer} pdfBuffer - PDF bytes to parse.
+   * @returns {Promise<BillDetails>} Parsed bill details and confidence.
+   */
   async parse(pdfBuffer: Buffer): Promise<BillDetails> {
     const fullText = await this.extractText(pdfBuffer);
     const amount = this.extractAmount(fullText);
@@ -86,6 +126,18 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
     };
   }
 
+  /**
+   * Extract numeric amount values from freeform text using several regex
+   * patterns and heuristics. Returns the most likely value with a
+   * confidence score.
+   *
+   * Heuristics include pattern priority, numeric range checks, and
+   * positional weighting within the document.
+   *
+   * @private
+   * @param {string} text - Full text extracted from the PDF.
+   * @returns {ExtractedField<number>} Extracted numeric amount and confidence.
+   */
   private extractAmount(text: string): ExtractedField<number> {
     const amounts: Array<{ value: number; confidence: number }> = [];
 
@@ -126,6 +178,19 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
     return amounts[0];
   }
 
+  /**
+   * Attempt to identify the bill's service provider/company name.
+   *
+   * Strategy:
+   * - Check an allow-list of known providers first (high confidence).
+   * - Inspect the document header lines and score candidate lines using
+   *   business-related keywords and heuristics.
+   * - Fall back to pattern-based extraction with lower confidence.
+   *
+   * @private
+   * @param {string} text - Full text extracted from the PDF.
+   * @returns {ExtractedField<string>} Provider name and confidence.
+   */
   private extractProvider(text: string): ExtractedField<string> {
     const clean = (v: string) =>
       v
@@ -225,6 +290,16 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
     return { value: undefined, confidence: 0 };
   }
 
+  /**
+   * Extract a due date string from the document using several date patterns.
+   *
+   * The returned value is the raw matched date string normalized for spacing
+   * and punctuation; consumers may convert this to a Date object if desired.
+   *
+   * @private
+   * @param {string} text - Full text extracted from the PDF.
+   * @returns {ExtractedField<string>} Due date string and confidence.
+   */
   private extractDueDate(text: string): ExtractedField<string> {
     const normalize = (v: string) =>
       v
@@ -241,6 +316,15 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
     return { value: undefined, confidence: 0 };
   }
 
+  /**
+   * Locate a payment portal URL or portal-like string in the document using
+   * several URL and keyword-based patterns. Performs light normalization and
+   * attempts to correct common OCR errors before validating as a URL.
+   *
+   * @private
+   * @param {string} text - Full text extracted from the PDF.
+   * @returns {ExtractedField<string>} Payment portal URL (or undefined) and confidence.
+   */
   private extractPaymentPortal(text: string): ExtractedField<string> {
     for (let i = 0; i < PORTAL_PATTERNS.length; i++) {
       const match = text.match(PORTAL_PATTERNS[i]);
