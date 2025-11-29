@@ -9,6 +9,7 @@ import BillDetails from "./BillDetails";
 import BillsList from "./BillsList";
 import Filters from "./Filters";
 import ImportBillModal from "./ImportBillModal";
+import Totals from "./Totals";
 
 export default function BillsLayout() {
   const [filter, setFilter] = useState<BillFilter>(undefined);
@@ -21,7 +22,8 @@ export default function BillsLayout() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       />
-      <section className="hero relative mb-0 lg:mb-40 mt-12 lg:mt-20 max-w-screen-xl mx-auto px-4">
+      <section className="hero relative mb-0 lg:mb-40 mt-4 lg:mt-8 max-w-screen-xl mx-auto px-4">
+        <Totals filter={filter} />
         <Filters filter={filter} setFilter={setFilter} />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white dark:bg-gray-900">

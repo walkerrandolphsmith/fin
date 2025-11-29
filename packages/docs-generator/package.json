@@ -1,0 +1,12 @@
+{
+  "name": "@fin/generate-docs",
+  "description": "Generate a PDF from markdown documentation files",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "run": "node generate-document.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.2"
+  }
+}

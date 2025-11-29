@@ -742,8 +742,6 @@ const Centroid = () => (
   </div>
 );
 
-//export { GoDependabot as Centroid } from "react-icons/go";
-
 export {
   A1,
   A2,
