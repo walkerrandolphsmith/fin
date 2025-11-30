@@ -11,6 +11,15 @@ The system achieved a comprehensive feature set organized around bill management
 
 ## 3. Class Diagram and Comparison Statement
 
+![Image](./classDiagram.drawio.png)
+
+### Notable Changes
+
+A feature to extract bill details from PDF documents was implemented in response to feedback from assignment 6.
+The decorator pattern was implemented to coordinate multiple PDF bill parsing strategies through a unified interface. The `BillParserDecorator` class implements the `IExtractBillDetailsFromPrintableDocuments` interface and maintains a collection of parser instances that also conform to this same interface. When a PDF is provided for parsing, the decorator executes all registered parsers concurrently using `Promise.allSettled`, allowing each parser to attempt extraction independently without one parser's failure affecting others. After all parsers complete or fail, the decorator filters successful results, sorts them by confidence score in descending order, and returns the result with the highest confidence value. This approach enables the system to leverage multiple parsing strategies simultaneously, including Claude AI-based extraction and naive text heuristics, while presenting a single, consistent interface to consuming code and automatically selecting the most reliable extraction result based on confidence scoring.
+
+Additionally, the Bill domain entity was extended with a `hasFixedAmount` boolean field to distinguish between bills with predictable amounts (such as rent and subscriptions) and bills with variable amounts (such as utilities and credit cards). This classification enabled the implementation of at-a-glance financial aggregations in the user interface, displaying the total amount for fixed bills, the total amount for variable bills, and the overall total across all bills, providing users with immediate insight into their predictable versus fluctuating financial obligations.
+
 ## 4. Third-Party code vs. original code Statement
 
 ### Original Code

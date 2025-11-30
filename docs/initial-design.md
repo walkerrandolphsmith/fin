@@ -682,6 +682,17 @@ classDiagram
         + type: PaymentSourceType
     }
 
+    class PaymentSourceType {
+        <<enumeration>>
+        BANK_ACCOUNT
+        DEBIT_CARD
+        CREDIT_CARD
+        VENMO
+        PAYPAL
+        CASH
+        OTHER
+    }
+
     PaymentSource o-- PaymentSourceProps : composition
     PaymentSourceProps ..> PaymentSourceName : uses
     PaymentSourceProps ..> PaymentSourceTypeObject : uses
@@ -853,6 +864,104 @@ classDiagram
     BillModel ..> MongooseModel : «dependency»
     BillModel ..> BillSchema : «dependency»
 
+```
+
+```mermaid
+classDiagram
+    %% Mongoose Framework Classes (External)
+    class Document~T~ {
+        <<Mongoose>>
+        + _id: T
+        + save() Promise
+        + remove() Promise
+    }
+
+    class Model~T~ {
+        <<Mongoose>>
+        + find(query) Promise~T[]~
+        + findById(id) Promise~T~
+        + create(doc) Promise~T~
+        + updateOne(filter, update) Promise
+        + deleteOne(filter) Promise
+    }
+
+    class Schema~T~ {
+        <<Mongoose>>
+        + add(obj) void
+        + path(path) SchemaType
+        + virtual(name) VirtualType
+    }
+
+    class SchemaTypes {
+        <<Mongoose>>
+        + ObjectId
+        + Mixed
+        + String
+        + Number
+        + Date
+        + Boolean
+    }
+
+    class ObjectId {
+        <<Mongoose>>
+        + toString() string
+    }
+
+    %% Application-Specific Classes
+    class IBillModel {
+        <<interface>>
+        + _id: ObjectId
+        + name: string
+        + amount: number
+        + dueDate?: Date
+        + createdAt: Date
+        + order: number
+        + paymentSourceId?: ObjectId
+        + isReoccurring: boolean
+        + paymentPortal: PaymentPortalObject
+        + hasFixedAmount: boolean
+    }
+
+    class PaymentPortalObject {
+        <<embedded>>
+        + type: "url" | "appIntent"
+        + value: string
+        + metadata?: Record~string, unknown~
+    }
+
+    class BillSchema {
+        <<Schema Instance>>
+        - name: SchemaDefinition
+        - amount: SchemaDefinition
+        - dueDate: SchemaDefinition
+        - createdAt: SchemaDefinition
+        - order: SchemaDefinition
+        - paymentSourceId: SchemaDefinition
+        - isReoccurring: SchemaDefinition
+        - paymentPortal: SchemaDefinition
+        - hasFixedAmount: SchemaDefinition
+    }
+
+    class BillModel {
+        <<Model Instance>>
+        + find() Promise~IBillModel[]~
+        + findById(id) Promise~IBillModel~
+        + create(doc) Promise~IBillModel~
+        + findByIdAndUpdate() Promise~IBillModel~
+        + findByIdAndDelete() Promise~void~
+    }
+
+    %% Relationships
+    IBillModel --|> Document~ObjectId~
+    IBillModel *-- PaymentPortalObject
+    IBillModel ..> ObjectId
+
+    BillSchema --|> Schema~IBillModel~
+    BillSchema ..> SchemaTypes
+
+    BillModel --|> Model~IBillModel~
+    BillModel ..> BillSchema
+    BillModel ..> IBillModel
 ```
 
 ---

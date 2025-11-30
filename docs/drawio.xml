@@ -1,0 +1,324 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Domain Layer - Entities" id="domain-entities">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Bill Entity -->
+        <mxCell id="bill-entity" value="&lt;b&gt;Bill&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="280" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="bill-fields" value="- props: BillProps" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="bill-entity">
+          <mxGeometry y="26" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="bill-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="bill-entity">
+          <mxGeometry y="52" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="bill-methods" value="+ static createNew(props): Bill&#xa;+ static rehydrate(props): Bill&#xa;+ get id(): string&#xa;+ get name(): BillName&#xa;+ get amount(): Money&#xa;+ get dueDate(): Date&#xa;+ get order(): number&#xa;+ get createdAt(): Date&#xa;+ get isReoccurring(): boolean&#xa;+ get paymentSourceId(): Relation&#xa;+ rename(newName: string): void&#xa;+ changeAmount(newAmount: number): void&#xa;+ assignPaymentSource(id: string): void&#xa;+ unAssignPaymentSource(): void&#xa;+ updateDueDate(date: Date): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="bill-entity">
+          <mxGeometry y="60" width="280" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- BillProps -->
+        <mxCell id="billprops" value="&lt;b&gt;BillProps&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="billprops-fields" value="+ id: string&#xa;+ name: BillName&#xa;+ amount: Money&#xa;+ dueDate?: Date&#xa;+ order: number&#xa;+ createdAt: Date&#xa;+ paymentSourceId?: Relation&#xa;+ isReoccurring: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="billprops">
+          <mxGeometry y="26" width="240" height="174" as="geometry" />
+        </mxCell>
+
+        <!-- BillName -->
+        <mxCell id="billname" value="&lt;b&gt;BillName&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="40" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="billname-fields" value="+ name: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="billname">
+          <mxGeometry y="26" width="150" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Money -->
+        <mxCell id="money" value="&lt;b&gt;Money&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="130" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="money-fields" value="+ amount: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="money">
+          <mxGeometry y="26" width="150" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Relation -->
+        <mxCell id="relation" value="&lt;b&gt;Relation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="220" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="relation-fields" value="+ id: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="relation">
+          <mxGeometry y="26" width="200" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="relation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="relation">
+          <mxGeometry y="52" width="200" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="relation-methods" value="- isValidObjectId(id: string): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="relation">
+          <mxGeometry y="60" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- PaymentSource -->
+        <mxCell id="paymentsource" value="&lt;b&gt;PaymentSource&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="450" width="300" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="paymentsource-fields" value="- props: PaymentSourceProps" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="paymentsource">
+          <mxGeometry y="26" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="paymentsource-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="paymentsource">
+          <mxGeometry y="52" width="300" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="paymentsource-methods" value="+ static createNew(props): PaymentSource&#xa;+ static rehydrate(props): PaymentSource&#xa;+ rename(newName: string): void&#xa;+ changeType(newType: PaymentSourceType): void&#xa;+ get id(): string&#xa;+ get name(): PaymentSourceName&#xa;+ get type(): PaymentSourceTypeObject&#xa;+ get details(): string&#xa;+ get createdAt(): Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="paymentsource">
+          <mxGeometry y="60" width="300" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- PaymentSourceProps -->
+        <mxCell id="paymentsourceprops" value="&lt;b&gt;PaymentSourceProps&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="450" width="240" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="paymentsourceprops-fields" value="+ id: string&#xa;+ name: PaymentSourceName&#xa;+ type: PaymentSourceTypeObject&#xa;+ details?: string&#xa;+ createdAt?: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="paymentsourceprops">
+          <mxGeometry y="26" width="240" height="124" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="bill-billprops" value="" style="endArrow=diamond;endFill=1;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="bill-fields" target="billprops-fields">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="340" y="150" as="sourcePoint" />
+            <mxPoint x="500" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="billprops-billname" value="" style="endArrow=open;endFill=0;endSize=12;html=1;dashed=1;exitX=1;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="billprops-fields" target="billname-fields">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="620" y="80" as="sourcePoint" />
+            <mxPoint x="680" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="billprops-money" value="" style="endArrow=open;endFill=0;endSize=12;html=1;dashed=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="billprops-fields" target="money-fields">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="620" y="100" as="sourcePoint" />
+            <mxPoint x="680" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="billprops-relation" value="" style="endArrow=open;endFill=0;endSize=12;html=1;dashed=1;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="billprops-fields" target="relation-fields">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="620" y="180" as="sourcePoint" />
+            <mxPoint x="680" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="paymentsource-props" value="" style="endArrow=diamond;endFill=1;endSize=12;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="paymentsource-fields" target="paymentsourceprops-fields">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="340" y="540" as="sourcePoint" />
+            <mxPoint x="400" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Domain Layer - Specifications" id="domain-specifications">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ISpecification Interface -->
+        <mxCell id="ispecification" value="&lt;&lt;interface&gt;&gt;&#xa;&lt;b&gt;ISpecification&amp;lt;T&amp;gt;&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="420" y="40" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ispecification-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="ispecification">
+          <mxGeometry y="40" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="ispecification-methods" value="+ isSatisfiedBy(entity: T): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="ispecification">
+          <mxGeometry y="48" width="280" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- BillDueInNWeeksSpecificationBase -->
+        <mxCell id="base-spec" value="&lt;&lt;abstract&gt;&gt;&#xa;&lt;b&gt;BillDueInNWeeksSpecificationBase&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="200" width="400" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="base-spec-fields" value="# weekOffset: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="base-spec">
+          <mxGeometry y="40" width="400" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="base-spec-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="base-spec">
+          <mxGeometry y="66" width="400" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="base-spec-methods" value="+ isSatisfiedBy(bill: Bill): boolean&#xa;- getWeekRange(offsetWeeks: number): Range" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="base-spec">
+          <mxGeometry y="74" width="400" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- BillDueThisWeekSpecification -->
+        <mxCell id="this-week-spec" value="&lt;b&gt;BillDueThisWeekSpecification&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="400" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="this-week-spec-fields" value="# weekOffset: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="this-week-spec">
+          <mxGeometry y="26" width="280" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- BillDueNextWeekSpecification -->
+        <mxCell id="next-week-spec" value="&lt;b&gt;BillDueNextWeekSpecification&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="400" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="next-week-spec-fields" value="# weekOffset: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="next-week-spec">
+          <mxGeometry y="26" width="280" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="base-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="base-spec" target="ispecification">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="500" y="200" as="sourcePoint" />
+            <mxPoint x="660" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="this-week-extends" value="" style="endArrow=block;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="this-week-spec" target="base-spec">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="420" y="400" as="sourcePoint" />
+            <mxPoint x="460" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="next-week-extends" value="" style="endArrow=block;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="next-week-spec" target="base-spec">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="740" y="400" as="sourcePoint" />
+            <mxPoint x="660" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Application Layer - Mutations" id="app-mutations">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- IBillMutation Interface -->
+        <mxCell id="ibillmutation" value="&lt;&lt;interface&gt;&gt;&#xa;&lt;b&gt;IBillMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="420" y="40" width="320" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ibillmutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="ibillmutation">
+          <mxGeometry y="40" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="ibillmutation-methods" value="+ execute(&#xa;    dto: UpdateBillDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="ibillmutation">
+          <mxGeometry y="48" width="320" height="62" as="geometry" />
+        </mxCell>
+
+        <!-- RenameBillMutation -->
+        <mxCell id="rename-mutation" value="&lt;b&gt;RenameBillMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="rename-mutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="rename-mutation">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="rename-mutation-methods" value="+ execute(&#xa;    dto: RenameBillDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="rename-mutation">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- SetDueDateMutation -->
+        <mxCell id="duedate-mutation" value="&lt;b&gt;SetDueDateMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="duedate-mutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="duedate-mutation">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="duedate-mutation-methods" value="+ execute(&#xa;    dto: SetBillDueDateDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="duedate-mutation">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- SetAmountMutation -->
+        <mxCell id="amount-mutation" value="&lt;b&gt;SetAmountMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="amount-mutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="amount-mutation">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="amount-mutation-methods" value="+ execute(&#xa;    dto: SetBillAmountDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="amount-mutation">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- AssignPaymentSourceMutation -->
+        <mxCell id="assign-mutation" value="&lt;b&gt;AssignPaymentSourceMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="assign-mutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="assign-mutation">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="assign-mutation-methods" value="+ execute(&#xa;    dto: AssignPaymentSourceDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="assign-mutation">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- ClearDueDateMutation -->
+        <mxCell id="clear-mutation" value="&lt;b&gt;ClearDueDateMutation&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="420" y="240" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="clear-mutation-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="clear-mutation">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="clear-mutation-methods" value="+ execute(&#xa;    dto: ClearBillDueDateDTO,&#xa;    domainService: BillService&#xa;  ): Promise&amp;lt;BillDTO&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="clear-mutation">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- BillService -->
+        <mxCell id="billservice-mutations" value="&lt;b&gt;BillService&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="40" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="billservice-mutations-separator" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="billservice-mutations">
+          <mxGeometry y="26" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="billservice-mutations-methods" value="- chooseStrategy(&#xa;    dto: UpdateBillDTO&#xa;  ): IBillMutation" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="billservice-mutations">
+          <mxGeometry y="34" width="320" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="rename-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="rename-mutation" target="ibillmutation">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="200" y="240" as="sourcePoint" />
+            <mxPoint x="360" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="duedate-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.2;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="duedate-mutation" target="ibillmutation">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="200" y="360" as="sourcePoint" />
+            <mxPoint x="360" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="amount-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.4;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="amount-mutation" target="ibillmutation">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="200" y="480" as="sourcePoint" />
+            <mxPoint x="360" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="assign-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.6;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="assign-mutation" target="ibillmutation">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="200" y="600" as="sourcePoint" />
+            <mxPoint x="360" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="clear-implements" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.8;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="clear-mutation" target="ibillmutation">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="580" y="240" as="sourcePoint" />
+            <mxPoint x="740" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="billservice-uses-mutations" value="" style="endArrow=open;endFill=0;endSize=12;html=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="billservice-mutations-methods" target="ibillmutation-methods">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="800" y="100" as="sourcePoint" />
+            <mxPoint x="740" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

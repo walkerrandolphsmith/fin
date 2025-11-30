@@ -17,49 +17,6 @@ interface ExtractedField<T> {
   confidence: number;
 }
 
-const KNOWN_PROVIDERS = [
-  "Georgia Power",
-  "Comcast",
-  "Xfinity",
-  "AT&T",
-  "Verizon",
-  "Spectrum",
-  "T-Mobile",
-  "Sprint",
-  "Southern Company",
-  "Arrow Exterminators",
-  "Gymnastics Unlimited",
-];
-
-const PROVIDER_PATTERNS = [
-  /(?:from|billed by|provider|company)[:\s]*([A-Z][A-Za-z\s&.]+(?:Inc|LLC|Corp|Company|Co)?)/i,
-  /^([A-Z][A-Z\s&.]{2,}(?:Inc|LLC|Corp|Company|Co|Energy|Electric|Gas|Water|Telecom|Mobile|Internet|Exterminators|Pest|Gymnastics)?)\s*$/m,
-  /((?:AT&T|Verizon|Comcast|Xfinity|Georgia Power|Spectrum|T-Mobile|Sprint|Arrow Exterminators|Gymnastics Unlimited))/i,
-];
-
-const AMOUNT_PATTERNS = [
-  /(?:total\s+(?:amount\s+)?due|amount\s+due|balance\s+due|please\s+pay)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
-  /(?:current\s+charges|new\s+charges|total\s+current)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
-  /(?:pay\s+this\s+amount|payment\s+due)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
-  /\$\s*([\d,]+\.\d{2})(?:\s*(?:due|total))/i,
-  /(?:^|\s)\$([\d,]+\.\d{2})(?:\s|$)/gm,
-  /(?:^|\s)\$([\d,]+(?:\.\d{1,2})?)(?:\s|$)/gm,
-];
-
-const PORTAL_PATTERNS = [
-  /(?:pay\s+(?:online\s+)?at|visit|go\s+to)[:\s]*((?:https?:\/\/)?[\w.-]+\.(?:com|net|org|gov)(?:\/[\w./-]*)?)/i,
-  /(?:website|portal|online)[:\s]*((?:https?:\/\/)?[\w.-]+\.(?:com|net|org|gov)(?:\/[\w./-]*)?)/i,
-  /((?:https?:\/\/)?(?:www\.)?[\w.-]+\.(?:com|net|org)\/(?:pay|bill|account|payment)[\w./-]*)/i,
-  /((?:https?:\/\/)?pay\.[\w.-]+\.(?:com|net|org))/i,
-];
-
-const DUE_DATE_PATTERNS = [
-  /please\s*pay\s*by[\s:]*([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
-  /due\s*date[\s:]*([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
-  /([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
-  /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/,
-];
-
 /**
  * PDF-based bill parser that extracts structured fields from printable
  * documents using text extracted by `pdf-parse` and a collection of
@@ -77,7 +34,44 @@ const DUE_DATE_PATTERNS = [
  */
 class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
   public readonly name = "pdf-parse";
-
+  private static knownProviders = [
+    "Georgia Power",
+    "Comcast",
+    "Xfinity",
+    "AT&T",
+    "Verizon",
+    "Spectrum",
+    "T-Mobile",
+    "Sprint",
+    "Southern Company",
+    "Arrow Exterminators",
+    "Gymnastics Unlimited",
+  ];
+  private static PROVIDER_PATTERNS = [
+    /(?:from|billed by|provider|company)[:\s]*([A-Z][A-Za-z\s&.]+(?:Inc|LLC|Corp|Company|Co)?)/i,
+    /^([A-Z][A-Z\s&.]{2,}(?:Inc|LLC|Corp|Company|Co|Energy|Electric|Gas|Water|Telecom|Mobile|Internet|Exterminators|Pest|Gymnastics)?)\s*$/m,
+    /((?:AT&T|Verizon|Comcast|Xfinity|Georgia Power|Spectrum|T-Mobile|Sprint|Arrow Exterminators|Gymnastics Unlimited))/i,
+  ];
+  private static AMOUNT_PATTERNS = [
+    /(?:total\s+(?:amount\s+)?due|amount\s+due|balance\s+due|please\s+pay)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
+    /(?:current\s+charges|new\s+charges|total\s+current)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
+    /(?:pay\s+this\s+amount|payment\s+due)[:\s]*\$?([\d,]+\.?\d{0,2})/i,
+    /\$\s*([\d,]+\.\d{2})(?:\s*(?:due|total))/i,
+    /(?:^|\s)\$([\d,]+\.\d{2})(?:\s|$)/gm,
+    /(?:^|\s)\$([\d,]+(?:\.\d{1,2})?)(?:\s|$)/gm,
+  ];
+  private static PORTAL_PATTERNS = [
+    /(?:pay\s+(?:online\s+)?at|visit|go\s+to)[:\s]*((?:https?:\/\/)?[\w.-]+\.(?:com|net|org|gov)(?:\/[\w./-]*)?)/i,
+    /(?:website|portal|online)[:\s]*((?:https?:\/\/)?[\w.-]+\.(?:com|net|org|gov)(?:\/[\w./-]*)?)/i,
+    /((?:https?:\/\/)?(?:www\.)?[\w.-]+\.(?:com|net|org)\/(?:pay|bill|account|payment)[\w./-]*)/i,
+    /((?:https?:\/\/)?pay\.[\w.-]+\.(?:com|net|org))/i,
+  ];
+  private static DUE_DATE_PATTERNS = [
+    /please\s*pay\s*by[\s:]*([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
+    /due\s*date[\s:]*([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
+    /([A-Za-z]{3,9}\.?[\s]*\d{1,2}[\s,]*\d{4})/i,
+    /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/,
+  ];
   /**
    * Extract raw text from a PDF buffer using the pdf-parse library.
    *
@@ -141,8 +135,8 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
   private extractAmount(text: string): ExtractedField<number> {
     const amounts: Array<{ value: number; confidence: number }> = [];
 
-    for (let i = 0; i < AMOUNT_PATTERNS.length; i++) {
-      const pattern = AMOUNT_PATTERNS[i];
+    for (let i = 0; i < PdfTextBillParser.AMOUNT_PATTERNS.length; i++) {
+      const pattern = PdfTextBillParser.AMOUNT_PATTERNS[i];
       const flags = pattern.flags.includes("g")
         ? pattern.flags
         : pattern.flags + "g";
@@ -199,7 +193,7 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
         .replace(/[^\w\s&.-]/g, "")
         .trim();
 
-    for (const prov of KNOWN_PROVIDERS) {
+    for (const prov of PdfTextBillParser.knownProviders) {
       const reg = new RegExp(prov.replace(/[-/\\^$*+?.()|[\]{}]/g, ""), "i");
       if (reg.test(text)) return { value: prov, confidence: 0.99 };
     }
@@ -279,8 +273,8 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
         confidence: candidateScores[0].score,
       };
 
-    for (let i = 0; i < PROVIDER_PATTERNS.length; i++) {
-      const match = text.match(PROVIDER_PATTERNS[i]);
+    for (let i = 0; i < PdfTextBillParser.PROVIDER_PATTERNS.length; i++) {
+      const match = text.match(PdfTextBillParser.PROVIDER_PATTERNS[i]);
       if (match?.[1]) {
         const cleaned = clean(match[1]);
         return { value: cleaned, confidence: 0.45 };
@@ -307,8 +301,8 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
         .replace(/\s*,\s*/g, ", ")
         .trim();
 
-    for (let i = 0; i < DUE_DATE_PATTERNS.length; i++) {
-      const match = DUE_DATE_PATTERNS[i].exec(text);
+    for (let i = 0; i < PdfTextBillParser.DUE_DATE_PATTERNS.length; i++) {
+      const match = PdfTextBillParser.DUE_DATE_PATTERNS[i].exec(text);
       if (match?.[1]) {
         return { value: normalize(match[1]), confidence: 1 - i * 0.15 };
       }
@@ -326,8 +320,8 @@ class PdfTextBillParser implements IExtractBillDetailsFromPrintableDocuments {
    * @returns {ExtractedField<string>} Payment portal URL (or undefined) and confidence.
    */
   private extractPaymentPortal(text: string): ExtractedField<string> {
-    for (let i = 0; i < PORTAL_PATTERNS.length; i++) {
-      const match = text.match(PORTAL_PATTERNS[i]);
+    for (let i = 0; i < PdfTextBillParser.PORTAL_PATTERNS.length; i++) {
+      const match = text.match(PdfTextBillParser.PORTAL_PATTERNS[i]);
       if (!match?.[1]) continue;
 
       let url = match[1].trim().toLowerCase();
