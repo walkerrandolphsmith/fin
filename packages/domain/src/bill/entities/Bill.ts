@@ -12,8 +12,9 @@ export interface BillProps {
   order?: number;
   createdAt: Date;
   paymentSourceId?: Relation;
-  isReoccurring: boolean;
+  isReoccurring?: boolean;
   paymentPortal?: PaymentPortal;
+  hasFixedAmount?: boolean;
 }
 
 /**
@@ -46,10 +47,11 @@ export class Bill {
     props: Omit<BillProps, "id" | "order" | "createdAt">
   ): Bill {
     return new Bill({
+      hasFixedAmount: true,
+      isReoccurring: true,
       ...props,
       id: randomUUID(),
       createdAt: new Date(),
-      isReoccurring: true,
     });
   }
 
@@ -127,6 +129,13 @@ export class Bill {
   get paymentPortal() {
     return this.props.paymentPortal;
   }
+  /**
+   * Whether the bill is fixed amount (readonly).
+   * @returns {boolean}
+   */
+  get hasFixedAmount() {
+    return this.props.hasFixedAmount;
+  }
 
   /**
    * Set or clear the payment portal URL for this bill. Accepts undefined to
@@ -194,5 +203,13 @@ export class Bill {
    */
   setSchedule(isReoccurring?: boolean) {
     this.props.isReoccurring = isReoccurring ?? true;
+  }
+
+  /**
+   * Set whether the bill is fixed or variable amount.
+   * @param isFixed
+   */
+  setAmountType(hasFixedAmount: boolean) {
+    this.props.hasFixedAmount = hasFixedAmount;
   }
 }

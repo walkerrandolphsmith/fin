@@ -5,6 +5,7 @@ export interface BillDTO {
   dueDate?: string;
   order: number;
   paymentSourceId?: string;
-  isReoccurring: boolean;
+  isReoccurring?: boolean;
   paymentPortalUrl?: string;
+  hasFixedAmount?: boolean;
 }

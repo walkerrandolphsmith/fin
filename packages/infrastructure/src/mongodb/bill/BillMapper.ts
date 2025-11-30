@@ -33,7 +33,8 @@ export class BillPersistenceMapper {
         | "number"
         | "date"
         | "boolean"
-        | "paymentPortal";
+        | "paymentPortal"
+        | "hasFixedAmount";
     }
   > = {
     id: { name: "_id", type: "objectId" },
@@ -45,6 +46,7 @@ export class BillPersistenceMapper {
     paymentSourceId: { name: "paymentSourceId", type: "objectId" },
     isReoccurring: { name: "isReoccurring", type: "boolean" },
     paymentPortal: { name: "paymentPortal", type: "paymentPortal" },
+    hasFixedAmount: { name: "hasFixedAmount", type: "boolean" },
   };
 
   /**
@@ -146,6 +148,7 @@ export class BillPersistenceMapper {
             metadata: doc.paymentPortal.metadata,
           })
         : undefined,
+      hasFixedAmount: doc.hasFixedAmount ?? true,
     });
   }
 
@@ -174,6 +177,7 @@ export class BillPersistenceMapper {
             metadata: bill.paymentPortal.metadata,
           }
         : undefined,
+      hasFixedAmount: bill.hasFixedAmount,
     };
   }
 }

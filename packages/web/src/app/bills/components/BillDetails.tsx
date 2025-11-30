@@ -9,12 +9,14 @@ import {
   ChevronDownIcon,
   CircleDollarSign,
   ExternalLink,
+  VariableIcon,
 } from "lucide-react";
 import { useState } from "react";
 import "react-day-picker/dist/style.css";
 import { useBillSelection } from "../context/BillSelectionContext";
 import { useBills } from "../hooks/useBills";
 import { usePaymentSources } from "../hooks/usePaymentSources";
+import AmountTypeSelector from "./AmountTypeSelector";
 import DueDateSelector from "./DueDateSelector";
 import PaymentPortalSelector from "./PaymentPortalSelector";
 
@@ -42,6 +44,8 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
       </div>
     );
   }
+
+  const amountType = bill.hasFixedAmount ? "Fixed Amount" : "Variable Amount";
 
   const formattedDate = bill.dueDate
     ? (() => {
@@ -87,6 +91,8 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
 
       <hr className="border-gray-200 dark:border-gray-700 mb-4" />
 
+      {/*  */}
+
       <Accordion.Root
         type="single"
         collapsible
@@ -104,6 +110,24 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
           <Accordion.Content>
             <div className="p-8">
               <DueDateSelector
+                bill={bill}
+                handleSave={billsState.updateBill}
+                setOpenAccordionItem={setOpenAccordionItem}
+              />
+            </div>
+          </Accordion.Content>
+        </Accordion.Item>
+
+        <Accordion.Item value="amount-type" className="overflow-hidden">
+          <AccordionTrigger icon={<VariableIcon size={24} />}>
+            <div className="flex flex-col items-start">
+              <div className="font-medium">Amount Type</div>
+              <div className="text-sm text-blue-600">{amountType}</div>
+            </div>
+          </AccordionTrigger>
+          <Accordion.Content>
+            <div className="p-8">
+              <AmountTypeSelector
                 bill={bill}
                 handleSave={billsState.updateBill}
                 setOpenAccordionItem={setOpenAccordionItem}

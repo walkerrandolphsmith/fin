@@ -6,7 +6,8 @@ export interface UpdateBillDTO {
     | "assignPaymentSource"
     | "setAmount"
     | "clearDueDate"
-    | "setPaymentPortal";
+    | "setPaymentPortal"
+    | "setAmountType";
 }
 
 export interface RenameBillDTO extends UpdateBillDTO {
@@ -38,4 +39,9 @@ export interface ClearBillDueDateDTO extends UpdateBillDTO {
 export interface SetPaymentPortalDTO extends UpdateBillDTO {
   mutationType: "setPaymentPortal";
   paymentPortalUrl: string;
+}
+
+export interface SetAmountTypeDTO extends UpdateBillDTO {
+  mutationType: "setAmountType";
+  hasFixedAmount: boolean;
 }

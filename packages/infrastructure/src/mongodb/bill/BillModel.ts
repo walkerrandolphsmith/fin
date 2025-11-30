@@ -23,6 +23,7 @@ export interface IBillModel extends Document<Types.ObjectId> {
     value: string;
     metadata?: Record<string, unknown>;
   };
+  hasFixedAmount: boolean;
 }
 
 /**
@@ -54,6 +55,7 @@ const BillSchema = new mongoose.Schema<IBillModel>({
     value: { type: String, required: false },
     metadata: { type: Schema.Types.Mixed, required: false },
   },
+  hasFixedAmount: { type: Boolean, default: true, required: false },
 });
 
 /**

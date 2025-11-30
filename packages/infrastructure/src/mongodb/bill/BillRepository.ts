@@ -121,7 +121,6 @@ export class BillRepository implements IBillRepository {
     if (!bill.id) throw new InvalidEntityIdError("undefined");
     if (!this.isValidObjectId(bill.id))
       throw new InvalidEntityIdError(bill.id);
-
     const model = BillPersistenceMapper.toModel(bill);
     const setObj: Record<string, any> = {};
     const unsetObj: Record<string, "" | 1> = {};

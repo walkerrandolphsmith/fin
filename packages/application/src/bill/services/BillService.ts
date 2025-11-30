@@ -12,6 +12,7 @@ import { ClearDueDateMutation } from "../mutations/ClearDueDateMutation";
 import { IBillMutation } from "../mutations/IBillMutation";
 import { RenameBillMutation } from "../mutations/RenameBillMutation";
 import { SetAmountMutation } from "../mutations/SetAmountMutation";
+import { SetAmountTypeMutation } from "../mutations/SetAmountTypeMutation";
 import { SetDueDateMutation } from "../mutations/SetDueDateMutation";
 import { SetPaymentPortalMutation } from "../mutations/SetPaymentPortalMutation";
 import { BillFilter } from "../types";
@@ -62,6 +63,8 @@ export class BillService {
         return new ClearDueDateMutation();
       case "setPaymentPortal":
         return new SetPaymentPortalMutation();
+      case "setAmountType":
+        return new SetAmountTypeMutation();
     }
   }
 

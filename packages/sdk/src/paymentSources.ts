@@ -9,7 +9,7 @@ import type {
  *   import { paymentSourceSDK } from '@fin/sdk'
  *   await paymentSourceSDK.getPaymentSources()
  */
-export class PaymentSourceSDK {
+class PaymentSourcesSDK {
   private apiBase: string;
   private headers = { "Content-Type": "application/json" };
 
@@ -36,7 +36,9 @@ export class PaymentSourceSDK {
    * const sources = await paymentSourceSDK.getPaymentSources();
    */
   async getPaymentSources(): Promise<PaymentSourceDTO[]> {
+    console.log("fetching payment sources", this, this.apiBase);
     const res = await fetch(`${this.apiBase}/api/paymentSources`);
+    console.log("fetching payment sources", res.ok);
     if (!res.ok) throw new Error("Failed to fetch paymentSources");
     const dto = (await res.json()) as PaymentSourceDTO[];
     return dto;
@@ -124,4 +126,4 @@ export class PaymentSourceSDK {
  * import { paymentSourceSDK } from '@fin/sdk';
  * await paymentSourceSDK.getPaymentSources();
  */
-export const paymentSourceSDK = new PaymentSourceSDK();
+export const paymentSourcesSDK = new PaymentSourcesSDK();

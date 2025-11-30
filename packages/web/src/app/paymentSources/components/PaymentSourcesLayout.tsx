@@ -22,7 +22,7 @@ export default function PaymentSourcesLayout() {
     isError,
   } = useQuery<PaymentSourceDTO[]>({
     queryKey: ["paymentSources"],
-    queryFn: PaymentSourcesSDK.getPaymentSources,
+    queryFn: () => PaymentSourcesSDK.getPaymentSources(),
     refetchOnWindowFocus: false,
   });
 
@@ -100,7 +100,6 @@ export default function PaymentSourcesLayout() {
         updatedPaymentSources[deletedIndex - 1] ||
         updatedPaymentSources[0] ||
         null;
-      console.log("next id", nextPaymentSource);
       setSelectedPaymentSourceId(nextPaymentSource?.id ?? null);
       await queryClient.invalidateQueries({ queryKey: ["paymentSources"] });
     } catch (err) {

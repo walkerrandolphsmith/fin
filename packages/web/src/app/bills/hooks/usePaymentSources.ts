@@ -7,7 +7,7 @@ export function usePaymentSources() {
 
   const query = useQuery({
     queryKey: ["paymentSources"],
-    queryFn: PaymentSourcesSDK.getPaymentSources,
+    queryFn: () => PaymentSourcesSDK.getPaymentSources(),
   });
 
   const createAndAssignMutation = useMutation({

@@ -27,6 +27,7 @@ export class BillDTOMapper {
       order: bill.order || Infinity,
       paymentSourceId: bill.paymentSourceId?.id,
       isReoccurring: bill.isReoccurring,
+      hasFixedAmount: bill.hasFixedAmount,
       paymentPortalUrl: bill.paymentPortal?.value,
     };
   }
@@ -45,6 +46,7 @@ export class BillDTOMapper {
       name: new BillName(dto.name),
       amount: new Money(dto.amount ?? 0),
       isReoccurring: true,
+      hasFixedAmount: true,
     };
     if (dto.paymentPortalUrl) {
       billProperties.paymentPortal = PaymentPortal.fromUrl(
@@ -99,6 +101,7 @@ export class BillDTOMapper {
       paymentPortalUrl: details.paymentPortal,
       isReoccurring: true,
       order: Infinity,
+      hasFixedAmount: true,
     };
   }
 }

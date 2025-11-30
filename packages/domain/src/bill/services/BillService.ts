@@ -135,6 +135,20 @@ export class BillService {
   }
 
   /**
+   * Set or clear the payment portal URL for a bill and persist the change.
+   *
+   * @param {string} id - The bill id to update.
+   * @param {boolean} hasFixedAmount - True if the bill has a fixed amount.
+   * @returns {Promise<Bill>} The persisted bill after the update.
+   */
+  async setAmountType(id: string, hasFixedAmount: boolean) {
+    const existingBill = await this.getExistingBill(id);
+    existingBill.setAmountType(hasFixedAmount);
+    const saved = await this.repo.update(existingBill);
+    return saved;
+  }
+
+  /**
    * Reorder a list of bills by delegating to the repository's batch reorder
    * operation. The service maps the Bill entities to the id/order DTO expected
    * by the repository.

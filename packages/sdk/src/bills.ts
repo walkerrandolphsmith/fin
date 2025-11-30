@@ -11,7 +11,7 @@ import type {
  *   import { billSDK } from '@fin/sdk'
  *   await billSDK.getBills()
  */
-export class BillSDK {
+class BillSDK {
   private apiBase: string;
   private headers = { "Content-Type": "application/json" };
 

@@ -34,6 +34,7 @@ import { NextRequest, NextResponse } from "next/server";
  *                 $ref: '#/components/schemas/PaymentSource'
  */
 export async function GET() {
+  console.log("fetching payment sources");
   const container = await getContainer();
   const repository = container.resolve<IPaymentSourceRepository>(
     TOKENS.PaymentSourceRepository
