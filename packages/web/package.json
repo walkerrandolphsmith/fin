@@ -9,7 +9,7 @@
     "docs": "node ./scripts/generate-document.js",
     "format": "prettier --write .",
     "lint": "eslint --fix .",
-    "start": "cross-env NODE_ENV=development MONGODB_URI=\"mongodb://localhost:27017/fin?replicaSet=rs0&directConnection=true\" next start"
+    "start": "next start"
   },
   "dependencies": {
     "@fin/application": "1.0.0",

@@ -3,7 +3,7 @@
 **Name:** Fin  
 **Team:** Walker Smith
 
-Fin is a household financial coordination system that centralizes bills, budgets, and payment sources to bring clarity, control, and confidence to household money management. Unlike traditional budgeting apps that assume a single user manages everything, Fin recognizes that households often divide financial responsibilities among partners who specialize in bill payment, budget management, and investment planning. The system serves as a household financial operating system that enables partners to collaborate transparently and efficiently on their specialized roles while maintaining alignment toward shared financial goals.
+Fin is a household financial coordination system that centralizes bills, budgets, and payment sources to bring clarity to household money management. Unlike traditional budgeting apps that assume a single user manages everything, Fin recognizes that households often divide financial responsibilities among partners who specialize in bill payment, budget management, and investment planning. The system serves as a household financial planner that enables partners to collaborate transparently and efficiently on their specialized roles while maintaining alignment toward shared financial goals.
 
 ## 2. Final State and System Capabilities
 
