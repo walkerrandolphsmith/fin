@@ -77,7 +77,7 @@ export default function Bill({
     <div ref={setNodeRef} style={style}>
       <div
         onClick={() => selectBill(bill.id)}
-        data-test-id="bill-row"
+        data-testid="bill-row"
         className={`cursor-pointer group grid grid-cols-[20px_1fr_auto] items-center pr-4 transition-colors duration-150 ${
           error
             ? "bg-red-50 dark:bg-red-900/40"
@@ -101,7 +101,7 @@ export default function Bill({
             ref={inputRef}
             type="text"
             name="bill-name"
-            data-test="bill-name-input"
+            data-testid="bill-name-input"
             value={displayBill.name ?? ""}
             onFocus={() => selectBill(bill.id)}
             onChange={(e) =>
@@ -128,7 +128,7 @@ export default function Bill({
             type="text"
             inputMode="numeric"
             name="bill-amount"
-            data-test="bill-amount-input"
+            data-testid="bill-amount-input"
             value={toDisplayAmount(displayBill.amount)}
             onFocus={() => selectBill(bill.id)}
             onChange={(e) => handleAmountInput(e, bill.id)}

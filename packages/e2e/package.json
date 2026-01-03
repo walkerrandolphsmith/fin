@@ -1,0 +1,19 @@
+{
+  "name": "@fin/e2e",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cy:install": "cypress install",
+    "cy:open": "cypress open --e2e",
+    "cy:run": "cypress run --e2e",
+    "cy:run:chrome": "cypress run --browser chrome",
+    "cy:run:firefox": "cypress run --browser firefox",
+    "test": "cypress run",
+    "test:headed": "cypress run --headed"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.3",
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}

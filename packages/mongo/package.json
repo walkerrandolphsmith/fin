@@ -1,0 +1,8 @@
+{
+  "name": "@fin/mongo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "docker run -d --name mongodb -p 27017:27017 mongo"
+  }
+}

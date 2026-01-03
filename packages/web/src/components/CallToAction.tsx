@@ -21,7 +21,7 @@ const CallToAction = (props: CallToActionProps) => {
   return (
     <Link
       className={`group flex min-w-max ${justify} ${props.color} dark:${props.darkColor} ${borderedStyles} py-2 flex items-center cta font-medium text-base transition-opacity transition-colors inline-block w-[fit-content] border hover:opacity-70 rounded-2xl`}
-      data-test={props.dataTestId}
+      data-testid={props.dataTestId}
       href={props.href}
       target={props.openExternally ? "_blank" : undefined}
       rel={props.openExternally ? "noopener noreferrer" : ""}

@@ -17,6 +17,7 @@ import { useBillSelection } from "../context/BillSelectionContext";
 import { useBills } from "../hooks/useBills";
 import { usePaymentSources } from "../hooks/usePaymentSources";
 import AmountTypeSelector from "./AmountTypeSelector";
+import DeleteConfirmationModal from "./ConfirmDeletionModal";
 import DueDateSelector from "./DueDateSelector";
 import PaymentPortalSelector from "./PaymentPortalSelector";
 
@@ -32,6 +33,8 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
   const [openAccordionItem, setOpenAccordionItem] = useState<
     string | undefined
   >();
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const bill = isCreatingNew ? newBillData : selectedBill;
 
@@ -60,7 +63,6 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
     )?.name ?? "Assign payment source";
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this bill?")) return;
     await billsState.deleteBill(bill.id);
   };
 
@@ -80,6 +82,13 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
 
   return (
     <div>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Bill"
+        message={`Are you sure you want to delete "${bill.name}"? This action cannot be undone.`}
+      />
       <div className="mb-4 p-6">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
           {isCreatingNew ? "New Bill" : bill.name}
@@ -187,8 +196,9 @@ export default function BillDetails({ billsState }: BillDetailsProps) {
       {!isCreatingNew && (
         <div className="p-6">
           <button
-            onClick={handleDelete}
+            onClick={() => setIsDeleteModalOpen(true)}
             className="cursor-pointer mt-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors font-medium"
+            data-testid="delete-bill-button"
           >
             Delete Bill
           </button>

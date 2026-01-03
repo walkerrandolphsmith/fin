@@ -47,6 +47,7 @@ const CandidateBill = forwardRef<HTMLInputElement, NewBillRowProps>(
             }}
             className="text-gray-900 dark:text-white text-sm font-medium truncate bg-transparent px-1 py-0.5 rounded w-full hover:bg-gray-100 dark:hover:bg-gray-800"
             placeholder="New bill name"
+            data-testid="new-bill-name-input"
           />
         </div>
         <div className="text-right">

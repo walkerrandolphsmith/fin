@@ -262,6 +262,7 @@ export default function BillsList({
 
       <div className="flex w-full justify-between">
         <button
+          data-testid="add-new-bill"
           onClick={startCreatingNew}
           className="my-4 ml-8 cursor-pointer text-blue-600 dark:text-blue-400 text-sm hover:underline active:text-blue-800 dark:active:text-blue-200"
         >
