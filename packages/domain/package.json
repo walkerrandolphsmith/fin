@@ -17,6 +17,11 @@
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "tsup": "^8.5.0"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "server-only": "^0.0.1"
   }
 }

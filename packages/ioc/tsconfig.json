@@ -32,7 +32,13 @@
       "@fin/bill-parser-claude": ["../bill-parser-claude/src"],
       "@fin/bill-parser-claude/*": ["../bill-parser-claude/src/*"],
       "@fin/bill-parser-pdf-parse": ["../bill-parser-pdf-parse/src"],
-      "@fin/bill-parser-pdf-parse/*": ["../bill-parser-pdf-parse/src/*"]
+      "@fin/bill-parser-pdf-parse/*": ["../bill-parser-pdf-parse/src/*"],
+      "@fin/email-sender": ["../email-sender/src"],
+      "@fin/email-sender/*": ["../email-sender/src/*"],
+      "@fin/email-sender-factory": ["../email-sender-factory/src"],
+      "@fin/email-sender-factory/*": ["../email-sender-factory/src/*"],
+      "@fin/configuration-factory": ["../configuration-factory/src"],
+      "@fin/configuration-factory/*": ["../configuration-factory/src/*"]
     }
   },
   "include": ["./src/**/*"],

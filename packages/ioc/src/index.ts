@@ -1,8 +1,13 @@
-import { BillService, PaymentSourceService } from "@fin/application";
+import {
+  BillService,
+  PaymentSourceService,
+  UserService,
+} from "@fin/application";
 import { IExtractBillDetailsFromPrintableDocuments } from "@fin/bill-parser";
 import { ClaudeBillParser } from "@fin/bill-parser-claude";
 import { BillParserDecorator } from "@fin/bill-parser-decorator";
 import { PdfTextBillParser } from "@fin/bill-parser-pdf-parse";
+import { ConfigurationFactory } from "@fin/configuration-factory";
 import {
   BillService as BillDomainService,
   IBillRepository,
@@ -10,6 +15,13 @@ import {
   IUnitOfWork,
   PaymentSourceService as PaymentSourceDomainService,
 } from "@fin/domain";
+import {
+  IUserRepository,
+  IVerificationTokenRepository,
+  UserService as UserDomainService,
+} from "@fin/domain/server";
+import { IEmailSender } from "@fin/email-sender";
+import { EmailSenderFactory } from "@fin/email-sender-factory";
 import { UnitOfWork } from "@fin/infrastructure";
 import "reflect-metadata";
 import { container, DependencyContainer } from "tsyringe";
@@ -33,6 +45,14 @@ const TOKENS = {
   PaymentSourceRepository: Symbol.for("PaymentSourceRepository"),
   UnitOfWork: Symbol.for("UnitOfWork"),
   BillParser: Symbol.for("BillParser"),
+  IUserRepository: Symbol.for("IUserRepository"),
+  IVerificationTokenRepository: Symbol.for("IVerificationTokenRepository"),
+  UserDomainService: Symbol.for("UserDomainService"),
+  UserService: Symbol.for("UserService"),
+  IEmailSender: Symbol.for("IEmailSender"),
+  UserRepository: Symbol.for("UserRepository"),
+  VerificationTokenRepository: Symbol.for("VerificationTokenRepository"),
+  MailgunEmailService: Symbol.for("MailgunEmailService"),
 };
 
 /**
@@ -62,10 +82,76 @@ const TOKENS = {
  * const c = container; // configured tsyringe container
  */
 async function setupContainer(): Promise<DependencyContainer> {
-  const { BillRepository, PaymentSourceRepository, connectMongoose } =
-    await import("@fin/infrastructure");
+  const configuration = ConfigurationFactory.create();
+  const {
+    BillRepository,
+    PaymentSourceRepository,
+    UserRepository,
+    VerificationTokenRepository,
+    connectMongoose,
+  } = await import("@fin/infrastructure");
 
   const promise = connectMongoose();
+
+  container.register(TOKENS.UserRepository, {
+    useClass: UserRepository,
+  });
+
+  container.register(TOKENS.VerificationTokenRepository, {
+    useClass: VerificationTokenRepository,
+  });
+
+  container.register(TOKENS.IUserRepository, {
+    useToken: TOKENS.UserRepository,
+  });
+
+  container.register(TOKENS.IVerificationTokenRepository, {
+    useToken: TOKENS.VerificationTokenRepository,
+  });
+
+  container.register(TOKENS.IEmailSender, {
+    useFactory: () => {
+      const emailSystemConfig = {
+        providers: {
+          mailgun: {
+            apiKey: configuration.mailgunApiKey,
+            domain: configuration.mailgunDomain,
+          },
+        },
+        baseUrl: configuration.baseUrl,
+      };
+      console.log("Creating EmailSender with config:", emailSystemConfig);
+      return EmailSenderFactory.create(emailSystemConfig);
+    },
+  });
+
+  container.register(TOKENS.UserDomainService, {
+    useFactory: (c) => {
+      const userRepository = c.resolve<IUserRepository>(
+        TOKENS.IUserRepository
+      );
+      const verificationTokenRepository =
+        c.resolve<IVerificationTokenRepository>(
+          TOKENS.IVerificationTokenRepository
+        );
+      const unitOfWork = c.resolve<IUnitOfWork>(TOKENS.UnitOfWork);
+      return new UserDomainService(
+        userRepository,
+        verificationTokenRepository,
+        unitOfWork
+      );
+    },
+  });
+
+  container.register(TOKENS.UserService, {
+    useFactory: (c) => {
+      const domainService = c.resolve<UserDomainService>(
+        TOKENS.UserDomainService
+      );
+      const emailService = c.resolve<IEmailSender>(TOKENS.IEmailSender);
+      return new UserService(domainService, emailService);
+    },
+  });
 
   container.register(TOKENS.BillRepository, {
     useClass: BillRepository,
@@ -130,7 +216,7 @@ async function setupContainer(): Promise<DependencyContainer> {
     useFactory: (c) => {
       return new BillParserDecorator([
         new PdfTextBillParser(),
-        new ClaudeBillParser(),
+        new ClaudeBillParser(configuration.anthropicApiKey),
       ]);
     },
   });

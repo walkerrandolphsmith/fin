@@ -18,7 +18,9 @@
       "@fin/domain": ["../domain/src/index.ts"],
       "@fin/domain/*": ["../domain/src/*"],
       "@fin/infrastructure": ["../infrastructure/src"],
-      "@fin/infrastructure/*": ["../infrastructure/src/*"]
+      "@fin/infrastructure/*": ["../infrastructure/src/*"],
+      "@fin/email-sender": ["../email-sender/src"],
+      "@fin/email-sender/*": ["../email-sender/src/*"]
     }
   },
   "include": ["src/**/*"],

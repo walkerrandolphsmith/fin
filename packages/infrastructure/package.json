@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@fin/domain": "1.0.0",
-    "tsup": "^8.5.0",
-    "mongoose": "^8.19.2"
+    "mongoose": "^8.19.2",
+    "tsup": "^8.5.0"
   }
 }

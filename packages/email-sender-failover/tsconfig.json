@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@fin/email-sender": ["../email-sender/src"],
+      "@fin/email-sender/*": ["../email-sender/src/*"],
+      "@fin/email-sender-circuit-breaker": [
+        "../email-sender-circuit-breaker/src"
+      ],
+      "@fin/email-sender-circuit-breaker/*": [
+        "../email-sender-circuit-breaker/src/*"
+      ]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

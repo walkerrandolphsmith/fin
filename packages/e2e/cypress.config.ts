@@ -9,6 +9,8 @@ export default defineConfig({
     specPattern: "src/tests/**/*.cy.ts",
     supportFile: "src/support/e2e.ts",
     videosFolder: "src/videos",
-    async setupNodeEvents(on, config) {},
+    setupNodeEvents(on, config) {
+      return config;
+    },
   },
 });

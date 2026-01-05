@@ -3,3 +3,4 @@ export * from "./mongodb/db/client";
 export * from "./mongodb/db/connect";
 export * from "./mongodb/paymentSource";
 export * from "./mongodb/UnitOfWork";
+export * from "./mongodb/user";

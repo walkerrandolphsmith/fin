@@ -56,3 +56,7 @@ README.md
 # CI/CD
 .github
 .gitlab-ci.yml
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

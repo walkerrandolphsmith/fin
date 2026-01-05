@@ -7,11 +7,15 @@
   ],
   "scripts": {
     "build": "yarn workspace @fin/web build && yarn workspace @fin/ctl build",
-    "dev": "yarn workspace @fin/web dev",
     "ctl": "yarn workspace @fin/ctl dev",
     "clean": "yarn workspaces run clean",
     "clean:dist": "find . -type d -name 'dist' -exec rm -rf {} +",
     "clean:modules": "find . -type d -name 'node_modules' -exec rm -rf {} +",
+    "dev": "yarn workspace @fin/web dev",
+    "env:login": "dotenv-vault login",
+    "env:pull": "dotenv-vault pull && cp ./.env ./packages/web/.env",
+    "env:encrypt": "dotenv-vault encrypt",
+    "env:decrypt": "dotenv-vault decrypt",
     "format": "prettier --write 'packages/**/*.{ts,tsx,js,json,css,scss,md}'"
   },
   "packageManager": "yarn@4.0.2",
@@ -23,5 +27,8 @@
     "prettier-plugin-tailwindcss": "^0.7.1",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv-vault": "^1.27.0"
   }
 }

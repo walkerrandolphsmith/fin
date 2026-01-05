@@ -1,0 +1,24 @@
+{
+  "name": "@fin/email-sender-factory",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf ./dist",
+    "test": "jest --testPathIgnorePatterns='smoke.test.ts$'",
+    "test:smoke": "jest smoke.test.ts"
+  },
+  "devDependencies": {
+    "ts-jest": "^29.4.6"
+  }
+}

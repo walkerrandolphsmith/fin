@@ -48,9 +48,9 @@ class ClaudeBillParser implements IExtractBillDetailsFromPrintableDocuments {
    * variable and sets a default model and token limit. No network IO occurs
    * during construction.
    */
-  constructor() {
+  constructor(private readonly apiKey: string) {
     this.client = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
+      apiKey: this.apiKey,
     });
     this.model = "claude-sonnet-4-5-20250929";
     this.maxTokens = 1024;

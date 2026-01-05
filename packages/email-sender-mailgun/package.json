@@ -1,0 +1,25 @@
+{
+  "name": "@fin/email-sender-mailgun",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf ./dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "form-data": "^4.0.5",
+    "mailgun.js": "^12.5.0"
+  },
+  "devDependencies": {}
+}

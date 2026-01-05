@@ -6,12 +6,31 @@ View the [presentation](https://colstate-my.sharepoint.com/:v:/g/personal/smith_
 
 ## Development
 
+### Setup
+
+Install dependencies:
+
+```bash
+yarn install
+```
+
+### Environment
+
+Fetch the .env file locally
+
+```bash
+yarn run env:login
+```
+
+Pull the latest .env file updates
+
+```bash
+yarn run env:pull
+```
+
 ### Web server
 
 ```bash
-yarn
-cp packages/web/sample.env packages/web/.env
-# Populate the environment file with mongoDB URI and Claude AI token
 yarn workspace @fin/web dev
 ```
 
@@ -20,7 +39,6 @@ yarn workspace @fin/web dev
 > Unlike the web server the CLI does not support reading environment variables from files. Therefore the mongoDB URI and Claude AI api key must be provided directly.
 
 ```bash
-yarn
 yarn workspace @fin/ctl dev bill list
 ```
 
@@ -29,7 +47,6 @@ yarn workspace @fin/ctl dev bill list
 ### Web server
 
 ```bash
-yarn
 yarn workspace @fin/web build
 yarn workspace @fin/web start
 ```
@@ -39,7 +56,6 @@ yarn workspace @fin/web start
 > Unlike the web server the CLI does not support reading environment variables from files. Therefore the mongoDB URI and Claude AI api key must be provided directly.
 
 ```bash
-yarn
 yarn workspace @fin/ctl build
 cd packages/ctl
 npm install -g .

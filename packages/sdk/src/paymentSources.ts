@@ -36,9 +36,7 @@ class PaymentSourcesSDK {
    * const sources = await paymentSourceSDK.getPaymentSources();
    */
   async getPaymentSources(): Promise<PaymentSourceDTO[]> {
-    console.log("fetching payment sources", this, this.apiBase);
     const res = await fetch(`${this.apiBase}/api/paymentSources`);
-    console.log("fetching payment sources", res.ok);
     if (!res.ok) throw new Error("Failed to fetch paymentSources");
     const dto = (await res.json()) as PaymentSourceDTO[];
     return dto;
